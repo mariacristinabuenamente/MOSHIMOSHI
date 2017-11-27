@@ -1,0 +1,215 @@
+//add jquery 
+$(document).ready(function(){
+      //listen to slider 
+        function getNum(n){return parseInt(n)}
+        $("#slider").on("click",function(){
+              
+               if(getNum($(this).css("width")) > 50){
+                    $(this).animate({width:"50px"},function(){
+                      $(this).find("button,ul").css({display:"none"})
+                    })
+               }
+                else{
+                   $(this).animate({width:"400px"},function(){
+                     $(this).find("button,ul").css({display:"block"})
+                   })
+                }
+             
+        })
+})
+
+
+
+
+
+
+
+
+var Todo = function(text,priority){ //used to create new todos 
+    this.text = text;this.priority = priority;
+    this.update = function(update){this.text = update.text;this.priority = update.priority;}
+}
+
+var TodoList = function(i){
+    //this is a constructor used to create babies called object
+    this.todos = [];this.listSize = function(){return this.todos.length;}
+    this.name ="Todo-List..." + i;
+     
+    this.add = function(todo){
+      //adds if the text is not the the list already; update if it is 
+      return todo.index !== undefined ? this.updateTodo(todo.index,todo): this.todos.push(new Todo(todo.text,todo.priority)) //pushes a new todo object  (we will get there lol!)
+    }
+    this.clear = function(){//clears the entire todo list 
+        delete this.todos; return this.todos = [];}
+    this.updateTodo = function(index,update){//updates a particular todo using the provided index and updated values as object
+      return (this.todos[index]).update(update);
+    }
+    this.findTodo = function(searchTodo){//finds the todo based on the content
+      var pos = -1;this.todos.forEach(function(todo,i){ if(searchTodo == todo.text){pos =i;} })
+     return pos;
+    }
+    this.deleteTodo = function(todo){//deletes the todo provided 
+      if(this.findTodo(todo) < 0){return false;}this.todos.splice(this.findTodo(todo),1);
+      return true;
+    }
+}
+
+//We are done with functionality; time to style
+var Alllist = React.createClass({
+    getInitialState(){
+      return {alltodos:[]}
+    },
+    create(){
+      var all = this.state.alltodos;
+        all.push(new TodoList(this.state.alltodos.length + 1));
+          return this.setState({alltodos:all})
+   
+  },
+  deleteList(i){
+        this.state.alltodos.splice(i,1);
+            return this.setState(this.state.alltodos)
+  },
+  render(){
+       
+    return(
+            <div id="alllist">
+                    <div id="slider" className="card">
+                            <button onClick={this.create}>Create New Todo</button>
+                        
+                     
+                    </div>
+            {this.state.alltodos.map(function(todolist,index){
+                        return (
+                         <div className="todo_lists">
+                          <button onClick={this.deleteList.bind(null,index)}>Delete A List </button>
+                          <Todos todolist={todolist} pos={index}/>
+                        </div>
+                        )
+            }.bind(this))} 
+            </div>
+      )
+  }
+})
+
+//let us display in the react domain!
+var Todos = React.createClass({
+        getInitialState(){return {todolist:this.props.todolist}},
+        displayList(){
+          var todolist = this.state.todolist.todos;
+          return (todolist.map(function(todo,i){
+                var props = {todo:todo,index:i,add:this.addATodo,delete:this.deleteATodo}
+              return <EachTodo {...props}/>
+          }.bind(this)))
+        },
+        addATodo(todo){
+             var todolist = this.state.todolist;todo.priority = todo.priority.length === 0 ? "Low":todo.priority;
+          todolist.add(todo);return this.setState(todolist)
+        },
+        clearList(){
+           var todolist = this.state.todolist;
+           todolist.clear();return this.setState(todolist)
+        },
+        deleteATodo(index){ 
+           var todolist = this.state.todolist;
+          todolist.deleteTodo(todolist.todos[index].text);
+                return this.setState(todolist)
+        },
+        render(){
+          return (
+              
+              <div className="todolist">
+                          <UserInput add={this.addATodo} pos={this.props.pos}/>
+                        <button onClick={this.clearList}>Clear</button>
+                        <ul className="collection">
+                            {this.displayList()}
+                        </ul>
+              </div>
+          
+          )
+        }    
+  
+})
+var EachTodo = React.createClass({
+  getInitialState(){
+    return {update:false}
+  },
+  setupdate(){
+    var u = !this.state.update;
+      return this.setState({update:u})
+  },
+   displayUpdate(){
+    return this.state.update ?  (<div>
+                       <HelperInputs add={this.add} option={"eachtodo" + this.props.index}/>
+                  </div>) : null;
+  },
+  add(todo){
+    todo.index = this.props.index;
+      return this.props.add(todo);
+  },
+  delete(){
+    
+    return this.props.delete(this.props.index)
+  },
+
+  render(){
+    return (
+                <li className={this.state.update ? "collection-item actived" :"collection-item"} >
+                  <span>{(this.props.index + 1) + ". " + this.props.todo.text  + " : " + this.props.todo.priority}</span>
+                    <button onClick={this.setupdate}>Update</button>
+                    <button onClick={this.delete}>Delete</button>
+                    {this.displayUpdate()}
+              </li>
+    )
+  }
+})
+
+var UserInput = React.createClass({
+   
+    render(){
+                   return (  
+                             <form className="userinput">
+                                <HelperInputs add={this.props.add} option={"userinput" + this.props.pos}/>
+                             </form>
+                     )
+    }
+})
+
+var HelperInputs = React.createClass({
+   getInitialState(){
+      return {text:"",priority:""}
+    },
+    updateInput(key,e){
+          var state = this.state;
+           state[key] = e.target.value;
+          return this.setState(state)
+    },
+    clearInput(){
+      $("input").val("");
+      $("input").prop("checked",false)
+    },
+   sendTodo(e){
+      e.preventDefault();
+     this.clearInput()
+      return this.props.add(this.state);
+    },
+  render(){
+    
+      return (
+        <div>
+          
+              <input type="text" onChange={this.updateInput.bind(this,"text")}/>
+            <p>
+          <input  type="radio" value="high" onChange={this.updateInput.bind(this,"priority")} name="priority" id={"high1" + this.props.option}/>
+          <label htmlFor={"high1" + this.props.option}>High</label>
+           </p>
+            <p>
+        <input type="radio" value="low" onChange={this.updateInput.bind(this,"priority")} name="priority"id={"low1" + this.props.option}/> 
+              <label htmlFor={"low1" + this.props.option}>Low</label>
+           </p>
+                                <button onClick={this.sendTodo}>Submit</button>
+        
+       </div>
+      )
+  }
+})
+ReactDOM.render(<Alllist/>,document.body)
