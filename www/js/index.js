@@ -241,21 +241,21 @@ var HelperInputs = React.createClass({
       React.createElement(
         "p",
         null,
-        React.createElement("input", { type: "radio", value: "high", onChange: this.updateInput.bind(this, "priority"), name: "priority", id: "high1" + this.props.option }),
+        React.createElement("input", { type: "radio", value: "verry important", onChange: this.updateInput.bind(this, "priority"), name: "priority", id: "verry important1" + this.props.option }),
         React.createElement(
           "label",
-          { htmlFor: "high1" + this.props.option },
-          "High"
+          { htmlFor: "verry important1" + this.props.option },
+          "verry important"
         )
       ),
       React.createElement(
         "p",
         null,
-        React.createElement("input", { type: "radio", value: "low", onChange: this.updateInput.bind(this, "priority"), name: "priority", id: "low1" + this.props.option }),
+        React.createElement("input", { type: "radio", value: "Not so important", onChange: this.updateInput.bind(this, "priority"), name: "priority", id: "Not so important1" + this.props.option }),
         React.createElement(
           "label",
-          { htmlFor: "low1" + this.props.option },
-          "Low"
+          { htmlFor: "Not so important1" + this.props.option },
+          "Not so important"
         )
       ),
       React.createElement(
