@@ -18,7 +18,7 @@ button{height:50px;border:none;color:black;font-weight:700;padding:10px;}
 .collection{border:none;}
 .userinput div > input{width:100%; }
 .userinput div p{width:30%;display:inline-block;background:white;}
-.userinput div button{width:30%;display:inline-block;}
+.userinput div button{display:inline-block;}
 ul{list-style:none;}
 ul li span{margin:5px;}
 .actived{color:#b1dcfb;background-color:white !important;}
