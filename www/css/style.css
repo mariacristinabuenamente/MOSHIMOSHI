@@ -9,8 +9,8 @@ background:grey;}
   position:fixed;left:0;top:0;z-index:2;
 }
 
-.card{margin:0;}
-button{height:50px;border:none;color:#34495e;font-weight:700;padding:10px;}
+.card{margin:0;width:100%;min-height:100px;float:left;padding:10px;}
+button{height:50px;border:none;color:black;font-weight:700;padding:10px;}
 #slider > button{width:100%;}
 
 .todo_lists{width:100%;min-height:100px;float:left;padding:10px;}

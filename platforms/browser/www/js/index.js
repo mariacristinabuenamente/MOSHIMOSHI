@@ -91,7 +91,7 @@ var Alllist = React.createClass({
         React.createElement(
           "button",
           { onClick: this.create },
-          "Create a Task"
+          "CREATE A TASK"
         )
       ),
       this.state.alltodos.map(function (todolist, index) {
@@ -124,7 +124,7 @@ var Todos = React.createClass({
     }.bind(this));
   },
   addATodo: function addATodo(todo) {
-    var todolist = this.state.todolist;todo.priority = todo.priority.length === 0 ? "Low" : todo.priority;
+    var todolist = this.state.todolist;todo.priority = todo.priority.length === 0 ? "" : todo.priority;
     todolist.add(todo);return this.setState(todolist);
   },
   clearList: function clearList() {
@@ -241,21 +241,21 @@ var HelperInputs = React.createClass({
       React.createElement(
         "p",
         null,
-        React.createElement("input", { type: "radio", value: "verry important", onChange: this.updateInput.bind(this, "priority"), name: "priority", id: "verry important1" + this.props.option }),
+        React.createElement("input", { type: "radio", value: "do", onChange: this.updateInput.bind(this, "priority"), name: "priority", id: "do1" + this.props.option }),
         React.createElement(
           "label",
-          { htmlFor: "verry important1" + this.props.option },
-          "verry important"
+          { htmlFor: "do1" + this.props.option },
+          "do"
         )
       ),
       React.createElement(
         "p",
         null,
-        React.createElement("input", { type: "radio", value: "Not so important", onChange: this.updateInput.bind(this, "priority"), name: "priority", id: "Not so important1" + this.props.option }),
+        React.createElement("input", { type: "radio", value: "later", onChange: this.updateInput.bind(this, "priority"), name: "priority", id: "later1" + this.props.option }),
         React.createElement(
           "label",
-          { htmlFor: "Not so important1" + this.props.option },
-          "Not so important"
+          { htmlFor: "later1" + this.props.option },
+          "later"
         )
       ),
       React.createElement(

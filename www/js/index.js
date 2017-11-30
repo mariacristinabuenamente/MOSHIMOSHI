@@ -91,7 +91,7 @@ var Alllist = React.createClass({
         React.createElement(
           "button",
           { onClick: this.create },
-          "Create a Task"
+          "CREATE A TASK"
         )
       ),
       this.state.alltodos.map(function (todolist, index) {
