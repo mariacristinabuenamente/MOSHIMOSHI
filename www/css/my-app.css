@@ -1,0 +1,183 @@
+
+body {
+    height: 100vh;
+    margin: 0;
+    background: url('../img/tina.png');
+    background-repeat: no-repeat;
+    font-family: 'Josefin Slab';
+}
+.todo-app {
+    max-width: 500px;
+    min-height: 50px;
+    margin: 50px auto;
+    padding-bottom: 50px;
+    background: rgba(255,255,255, .4);
+    border-radius: 5px;
+    box-shadow: 0 0 4px #666666;
+}
+.header {
+    padding-top: 20px;
+    text-align: center;
+    font-family: 'Josefin Slab';
+    font-weight: 600;
+    color: #83b7d3;
+}
+.add-item-form {
+    width: 90%;
+    height: 40px;
+    margin: 0 auto;
+    padding-bottom: 25px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.add-item-input {
+    width: 80%;
+    height: 100%;
+    padding: 0 10px;
+    font-family: 'Shadows Into Light';
+    border: 1px solid transparent;
+}
+.add-item-button {
+    width: 20%;
+    height: 100%;
+    text-transform: uppercase;
+    background: #add8e6;
+    border: 1px solid transparent;
+    font-family: 'Josefin Slab';
+    font-weight: 600;
+    transition: .3s;
+}
+.add-item-button:hover, .add-item-button:focus {
+    cursor: pointer;
+    background: lightgreen;
+}
+.add-item-info {
+    width: 100%;
+    position: absolute;
+    left: 5px;
+    bottom: -20px;
+    font-family: 'Josefin Slab';
+    font-weight: 600;
+    color: #f4424e;
+}
+.todo-list {
+    width: 90%;
+    margin: 20px auto;
+    padding: 0;
+    list-style: none;
+}
+.todo-item {
+    height: 40px;
+    margin-bottom: 10px;
+    padding: 5px;
+    font-family: 'Shadows Into Light';
+    font-size: 18px;
+    border-bottom: 1px dashed #999999;
+}
+.todo-item-name {
+    margin-left: 5px;
+    color: #434343;
+}
+.todo-item-name:hover, .todo-item-name--completed:hover {
+    cursor: pointer;
+}
+.todo-item-name--completed {
+    margin-left: 5px;
+    text-decoration: line-through;
+    color: #999999;
+}
+.todo-item-wrapper {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.editing-form-input {
+    padding: 5px;
+    background: rgba(0, 0, 0, .1);
+    border: none;
+    font-family: 'Shadows Into Light';
+    font-size: 18px;
+    color: #666666;
+}
+.buttons {
+    border: 1px solid red;
+}
+.button {
+    height: 100%;
+    margin: 5px;
+    padding: 5px 15px;
+    background: rgba(255,255,255, .6);
+    border: none;
+    font-family: 'Josefin Slab';
+    font-weight: 600;
+    transition: .3s;
+}
+.button:hover, .button:focus {
+    cursor: pointer;
+    background: #add8e6;
+    color: #ffffff;
+}
+
+
+body {
+   
+    padding: 40px;
+    width: 130%;
+    height: 400px;
+    margin: 0 auto;
+ 
+}
+
+#clock {
+    height:40px;
+    font-size: 40px;
+    font-family: arial;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h2 {
+    text-align:center;
+
+}
+
+#alarm-container {
+    text-align:center;
+    font-family: Verdana;
+    font-size: 0.6em;
+    padding: 0.7em;
+}
+
+label {
+    display:inline-block;
+}
+
+.timeofday {
+    background-color: pink;
+}
+
+.bigger {
+    font-weight:bold;
+    font-size: 18px;
+}
+
+#sounds {
+    text-align: center;
+    padding-top: 20px;
+}
+
+#setButton {
+    float:center;
+    background-color:#81dfd6;
+    margin-top:10px;
+}
+#clearButton {
+    float:center;
+    background-color: #81dfd6;
+    margin-top:10px;
+}
