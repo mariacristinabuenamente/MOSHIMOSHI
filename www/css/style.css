@@ -1,34 +1,195 @@
-@import "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css";
-@import 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,700';
-
-body{width:100%;height:50px;font-family: 'Roboto', sans-serif;padding:0;margin:0;
-background-image:url("../img/brown.jpg");}
-#alllist{width:100%;margin-left:25%;margin-right:25%;height:50%;}
-#slider{
-  width:400px;height:720px;background-image: url("../img/todo.jpg");
-  position:fixed;left:0;top:0;z-index:2;
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
 }
 
-.card{margin:0;width:100%;min-height:100px;float:left;padding:10px;}
-button{height:50px;border:none;color:black;font-weight:700;padding:10px;}
-#slider > button{width:100%;}
+.clearfix {
+  display: inline-block;
+}
 
-.todo_lists{width:100%;min-height:100px;float:left;padding:10px;}
-.todolist{width:100%;min-height:100px;float:left;padding:10px;}
-.collection{border:none;}
-.userinput div > input{width:100%; }
-.userinput div p{width:30%;display:inline-block;background:white;}
-.userinput div button{display:inline-block;}
-ul{list-style:none;}
-ul li span{margin:5px;}
-.actived{color:#b1dcfb;background-color:white !important;}
-.actived label{color:#b1dcfb;}
+* {
+  outline: none;
+}
 
-.todotitles{width:50%;margin-left:25%;margin-top:5%;cursor:pointer;}
-.todotitles:hover{border-bottom:2px solid #f1c40f;}
-#all{background:#34495e;color:#bdc3c7;}
+/* start commented backslash hack \*/
+* html .clearfix {
+  height: 1%;
+  outline: none;
+}
 
+.clearfix {
+  display: block;
+}
 
+/* close commented backslash hack */
+body {
+  background: #F0EFE9;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+}
+body section {
+  max-width: 650px;
+  margin: 20px auto;
+  background: #fff;
+  padding: 50px;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+body section header .date {
+  display: inline-block;
+  float: left;
+}
+body section header .date .day {
+  display: inline-block;
+  font-size: 50px;
+}
+body section header .date span {
+  display: inline-block;
+  margin-left: 5px;
+}
+body section header .date span p {
+  line-height: 6px;
+}
+body section header .dayinword {
+  display: inline-block;
+  float: right;
+  line-height: 60px;
+}
+body section .add-new {
+  margin-top: 20px;
+}
+body section .add-new input {
+  width: 100%;
+  padding: 15px 5px;
+  box-sizing: border-box;
+}
+body section .listbox {
+  margin-top: 20px;
+}
+body section .listbox.hide_archived .todo.archived {
+  display: none;
+}
+body section .listbox .todo {
+  padding: 15px 10px;
+}
+body section .listbox .todo:hover {
+  background: #eaeaea;
+}
+body section .listbox .todo label {
+  float: left;
+  cursor: pointer;
+  position: relative;
+  width: 90%;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+body section .listbox .todo label:before {
+  content: '';
+  border: 2px solid #51E3A4;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  top: 50%;
+  right: 0;
+  margin-top: -12px;
+  position: absolute;
+  cursor: pointer;
+}
+body section .listbox .todo input {
+  -webkit-appearance: none;
+  outline: none;
+}
+body section .listbox .todo input.status:checked + label:before {
+  opacity: 0.8;
+  background: #51E3A4;
+  -webkit-transition: all 750ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+body section .listbox .todo input.visibility {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  float: left;
+  margin-right: 20px;
+  cursor: pointer;
+}
+body section .listbox .todo input.visibility:before {
+  content: "\f06e";
+  font-family: 'fontawesome';
+}
+body section .listbox .todo input.visibility:checked:before {
+  content: "\f070";
+}
+body section .listbox .todo.done label span {
+  opacity: 0.5;
+}
+body section .visibility_control {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #51E3A4;
+}
+body section .visibility_control input {
+  -webkit-appearance: none;
+  opacity: 0.8;
+  border: 1px solid #51E3A4;
+  margin: 2px;
+  outline: none;
+  cursor: pointer;
+  background: transparent;
+  -webkit-transition: all 750ms cubic-bezier(0.23, 1, 0.32, 1);
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+  margin-right: 10px;
+  vertical-align: bottom;
+}
+body section .visibility_control input:checked {
+  position: relative;
+}
+body section .visibility_control input:checked:before {
+  content: "\f00c";
+  font-family: "fontawesome";
+  color: #51E3A4;
+  position: absolute;
+  left: 1px;
+  font-weight: lighter;
+}
+body section .visibility_control label {
+  line-height: 20px;
+  cursor: pointer;
+}
 
+.strikethrough {
+  display: inline-block;
+  position: relative;
+}
 
+.strikethrough:after {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 2px;
+  margin-top: -0.6em;
+  background: black;
+  transform-origin: center left;
+  animation: strikethrough 0.5s 0.5s cubic-bezier(0.55, 0, 0.1, 1) 1 forwards;
+  transition: transform 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+  transform: scaleX(0);
+}
 
+/* Keyframes for initial animation */
+@keyframes strikethrough {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}

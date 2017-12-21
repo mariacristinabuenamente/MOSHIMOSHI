@@ -1,269 +1,155 @@
-"use strict";
+var ToDoList = React.createClass({
+  displayName: 'ToDoList',
 
-//add jquery
-$(document).ready(function () {
-  //listen to slider
-  function getNum(n) {
-    return parseInt(n);
-  }
-  $("#slider").on("click", function () {
-
-    if (getNum($(this).css("width")) > 50) {
-      $(this).animate({ width: "50px" }, function () {
-        $(this).find("button,ul").css({ display: "none" });
-      });
-    } else {
-      $(this).animate({ width: "400px" }, function () {
-        $(this).find("button,ul").css({ display: "block" });
-      });
-    }
-  });
-});
-
-var Todo = function Todo(text, priority) {
-  //used to create new todos
-  this.text = text;this.priority = priority;
-  this.update = function (update) {
-    this.text = update.text;this.priority = update.priority;
-  };
-};
-
-var TodoList = function TodoList(i) {
-  //this is a constructor used to create babies called object
-  this.todos = [];this.listSize = function () {
-    return this.todos.length;
-  };
-  this.name = "Todo-List..." + i;
-
-  this.add = function (todo) {
-    //adds if the text is not the the list already; update if it is
-    return todo.index !== undefined ? this.updateTodo(todo.index, todo) : this.todos.push(new Todo(todo.text, todo.priority)); //pushes a new todo object  (we will get there lol!)
-  };
-  this.clear = function () {
-    //clears the entire todo list
-    delete this.todos;return this.todos = [];
-  };
-  this.updateTodo = function (index, update) {
-    //updates a particular todo using the provided index and updated values as object
-    return this.todos[index].update(update);
-  };
-  this.findTodo = function (searchTodo) {
-    //finds the todo based on the content
-    var pos = -1;this.todos.forEach(function (todo, i) {
-      if (searchTodo == todo.text) {
-        pos = i;
+  getInitialState: function getInitialState() {
+    var localtodos = this.getTodos();
+    return {
+      todos: localtodos,
+      hide_archived: false
+    };
+  },
+  getTodos: function getTodos() {
+    var todos = localStorage.getItem('todosJKqGKb');
+    try {
+      if (Array.isArray(JSON.parse(todos))) {
+        return JSON.parse(todos);
+      } else {
+        return [['Buy New Monitor', true, false], ['Start Design Phase', false, true], ['Book Domain Name', true, false], ['Start Development', false, false]];
       }
+    } catch (e) {
+      return [['Buy New Monitor', true, false], ['Start Design Phase', false, true], ['Book Domain Name', true, false], ['Start Development', false, false]];
+    }
+  },
+  setTodos: function setTodos() {
+    localStorage.setItem('todosJKqGKb', JSON.stringify(this.state.todos));
+  },
+  componentDidUpdate: function componentDidUpdate() {
+    this.setTodos();
+  },
+  handleKeyPress: function handleKeyPress(item) {
+    var newtodo = new Array(item, false, false);
+    this.state.todos.push(newtodo);
+    this.forceUpdate();
+  },
+  toggle: function toggle(todoid) {
+    this.state.todos[todoid][1] = !this.state.todos[todoid][1];
+    this.forceUpdate();
+  },
+  toggleVisibility: function toggleVisibility(todoid) {
+    this.state.todos[todoid][2] = !this.state.todos[todoid][2];
+    this.forceUpdate();
+  },
+  show_hide_archived: function show_hide_archived() {
+    this.setState({
+      hide_archived: !this.state.hide_archived
     });
-    return pos;
-  };
-  this.deleteTodo = function (todo) {
-    //deletes the todo provided
-    if (this.findTodo(todo) < 0) {
-      return false;
-    }this.todos.splice(this.findTodo(todo), 1);
-    return true;
-  };
-};
-
-//We are done with functionality; time to style
-var Alllist = React.createClass({
-  displayName: "Alllist",
-  getInitialState: function getInitialState() {
-    return { alltodos: [] };
-  },
-  create: function create() {
-    var all = this.state.alltodos;
-    all.push(new TodoList(this.state.alltodos.length + 1));
-    return this.setState({ alltodos: all });
-  },
-  deleteList: function deleteList(i) {
-    this.state.alltodos.splice(i, 1);
-    return this.setState(this.state.alltodos);
   },
   render: function render() {
-
+    var dt = new Date();
     return React.createElement(
-      "div",
-      { id: "alllist" },
+      'div',
+      null,
       React.createElement(
-        "div",
-        { id: "slider", className: "card" },
+        'header',
+        { className: 'clearfix' },
         React.createElement(
-          "button",
-          { onClick: this.create },
-          "CREATE A TASK"
-        )
-      ),
-      this.state.alltodos.map(function (todolist, index) {
-        return React.createElement(
-          "div",
-          { className: "todo_lists" },
+          'div',
+          { className: 'date' },
           React.createElement(
-            "button",
-            { onClick: this.deleteList.bind(null, index) },
-            "Delete A List "
+            'div',
+            { className: 'day' },
+            dt.getDate()
           ),
-          React.createElement(Todos, { todolist: todolist, pos: index })
+          React.createElement(
+            'span',
+            null,
+            React.createElement(
+              'p',
+              { className: 'month' },
+              dt.toLocaleString('en-us', { month: "short" }).toUpperCase()
+            ),
+            React.createElement(
+              'p',
+              { className: 'year' },
+              dt.getFullYear()
+            )
+          )
+        ),
+        React.createElement(
+          'div',
+          { className: 'dayinword' },
+          dt.toLocaleString('en-us', { weekday: 'long' }).toUpperCase()
+        )
+      ),
+      React.createElement(AddNew, { addtodo: this.handleKeyPress }),
+      React.createElement(List, { todos: this.state.todos, hide_archived: this.state.hide_archived, toggle: this.toggle, toggleVisibility: this.toggleVisibility, show_hide_archived: this.show_hide_archived })
+    );
+  }
+});
+
+var AddNew = React.createClass({
+  displayName: 'AddNew',
+
+  handleKeyPress: function handleKeyPress(evt) {
+    if (evt.key == 'Enter' && this.refs.addNew.value.trim().length > 0) {
+      this.props.addtodo(this.refs.addNew.value);
+      this.refs.addNew.value = '';
+    }
+  },
+  render: function render() {
+    return React.createElement(
+      'div',
+      { className: 'add-new' },
+      React.createElement('input', { type: 'text', onKeyPress: this.handleKeyPress, ref: 'addNew', placeholder: 'Add New Task' })
+    );
+  }
+});
+
+var List = React.createClass({
+  displayName: 'List',
+
+  show_hide_archived: function show_hide_archived() {
+    this.props.show_hide_archived();
+  },
+  toggleToDo: function toggleToDo(i) {
+    this.props.toggle(i);
+  },
+  toggleVisibility: function toggleVisibility(i) {
+    this.props.toggleVisibility(i);
+  },
+  render: function render() {
+    return React.createElement(
+      'div',
+      { className: "listbox " + (this.props.hide_archived ? "hide_archived" : "") },
+      this.props.todos.map(function (todo, index) {
+        return React.createElement(
+          'div',
+          { id: "todo" + index, className: "todo clearfix " + (todo[2] ? "archived " : "") + (todo[1] ? "done" : "") },
+          React.createElement('input', { className: 'visibility', onChange: this.toggleVisibility.bind(this, index), ref: 'visibility', checked: todo[2] ? "checked" : "", type: 'checkbox' }),
+          React.createElement('input', { className: 'status', onChange: this.toggleToDo.bind(this, index), ref: 'todoid', id: index, checked: todo[1] ? "checked" : "", type: 'checkbox' }),
+          React.createElement(
+            'label',
+            { htmlFor: index },
+            React.createElement(
+              'span',
+              { className: todo[1] ? "strikethrough" : "" },
+              todo
+            )
+          )
         );
-      }.bind(this))
-    );
-  }
-});
-
-//let us display in the react domain!
-var Todos = React.createClass({
-  displayName: "Todos",
-  getInitialState: function getInitialState() {
-    return { todolist: this.props.todolist };
-  },
-  displayList: function displayList() {
-    var todolist = this.state.todolist.todos;
-    return todolist.map(function (todo, i) {
-      var props = { todo: todo, index: i, add: this.addATodo, delete: this.deleteATodo };
-      return React.createElement(EachTodo, props);
-    }.bind(this));
-  },
-  addATodo: function addATodo(todo) {
-    var todolist = this.state.todolist;todo.priority = todo.priority.length === 0 ? "" : todo.priority;
-    todolist.add(todo);return this.setState(todolist);
-  },
-  clearList: function clearList() {
-    var todolist = this.state.todolist;
-    todolist.clear();return this.setState(todolist);
-  },
-  deleteATodo: function deleteATodo(index) {
-    var todolist = this.state.todolist;
-    todolist.deleteTodo(todolist.todos[index].text);
-    return this.setState(todolist);
-  },
-  render: function render() {
-    return React.createElement(
-      "div",
-      { className: "todolist" },
-      React.createElement(UserInput, { add: this.addATodo, pos: this.props.pos }),
+      }, this),
       React.createElement(
-        "button",
-        { onClick: this.clearList },
-        "Clear"
-      ),
-      React.createElement(
-        "ul",
-        { className: "collection" },
-        this.displayList()
+        'div',
+        { className: 'visibility_control' },
+        React.createElement('input', { id: 'show_hide', onChange: this.show_hide_archived, checked: this.props.hide_archived ? "checked" : "", className: 'togglevisibility', type: 'checkbox' }),
+        React.createElement(
+          'label',
+          { htmlFor: 'show_hide' },
+          'Hide archived todos'
+        )
       )
     );
   }
 });
-var EachTodo = React.createClass({
-  displayName: "EachTodo",
-  getInitialState: function getInitialState() {
-    return { update: false };
-  },
-  setupdate: function setupdate() {
-    var u = !this.state.update;
-    return this.setState({ update: u });
-  },
-  displayUpdate: function displayUpdate() {
-    return this.state.update ? React.createElement(
-      "div",
-      null,
-      React.createElement(HelperInputs, { add: this.add, option: "eachtodo" + this.props.index })
-    ) : null;
-  },
-  add: function add(todo) {
-    todo.index = this.props.index;
-    return this.props.add(todo);
-  },
-  delete: function _delete() {
 
-    return this.props.delete(this.props.index);
-  },
-  render: function render() {
-    return React.createElement(
-      "li",
-      { className: this.state.update ? "collection-item actived" : "collection-item" },
-      React.createElement(
-        "span",
-        null,
-        this.props.index + 1 + ". " + this.props.todo.text + " : " + this.props.todo.priority
-      ),
-      React.createElement(
-        "button",
-        { onClick: this.setupdate },
-        "Update"
-      ),
-      React.createElement(
-        "button",
-        { onClick: this.delete },
-        "Delete"
-      ),
-      this.displayUpdate()
-    );
-  }
-});
-
-var UserInput = React.createClass({
-  displayName: "UserInput",
-  render: function render() {
-    return React.createElement(
-      "form",
-      { className: "userinput" },
-      React.createElement(HelperInputs, { add: this.props.add, option: "userinput" + this.props.pos })
-    );
-  }
-});
-
-var HelperInputs = React.createClass({
-  displayName: "HelperInputs",
-  getInitialState: function getInitialState() {
-    return { text: "", priority: "" };
-  },
-  updateInput: function updateInput(key, e) {
-    var state = this.state;
-    state[key] = e.target.value;
-    return this.setState(state);
-  },
-  clearInput: function clearInput() {
-    $("input").val("");
-    $("input").prop("checked", false);
-  },
-  sendTodo: function sendTodo(e) {
-    e.preventDefault();
-    this.clearInput();
-    return this.props.add(this.state);
-  },
-  render: function render() {
-
-    return React.createElement(
-      "div",
-      null,
-      React.createElement("input", { type: "text", onChange: this.updateInput.bind(this, "text") }),
-      React.createElement(
-        "p",
-        null,
-        React.createElement("input", { type: "radio", value: "do", onChange: this.updateInput.bind(this, "priority"), name: "priority", id: "do1" + this.props.option }),
-        React.createElement(
-          "label",
-          { htmlFor: "do1" + this.props.option },
-          "do"
-        )
-      ),
-      React.createElement(
-        "p",
-        null,
-        React.createElement("input", { type: "radio", value: "later", onChange: this.updateInput.bind(this, "priority"), name: "priority", id: "later1" + this.props.option }),
-        React.createElement(
-          "label",
-          { htmlFor: "later1" + this.props.option },
-          "later"
-        )
-      ),
-      React.createElement(
-        "button",
-        { onClick: this.sendTodo },
-        "Submit"
-      )
-    );
-  }
-});
-ReactDOM.render(React.createElement(Alllist, null), document.body);
+ReactDOM.render(React.createElement(ToDoList, null), document.getElementById('todolist'));

@@ -1,36 +1,76 @@
 <!DOCTYPE html>
 <html lang="en" >
+
 <head>
   <meta charset="UTF-8">
-  <title>Task List </title>
+  <title>Todo List with React and LocalStorage</title>
   
-  
-  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+  <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Quicksand'>
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+
       <link rel="stylesheet" href="css/style.css">
-      
-
-
-
+     <link rel="stylesheet" href="css/tina.css">
   
 </head>
+<div id='main-container'>
+			<h2 id='clock'></h2>
+		</div>
 
-<div class="todolist">
-	<form class="userinput"><div><input type="text">
-		<p><input type="radio" value="do" name="priority" id="verry do0">
-			<label for="later0">do</label></p>
-			<p><input type="radio" value="later" name="priority" id="later0">
-				<label for="later0">later</label>
-			</p><button>Submit</button></div>
-		</form><button>Clear</button><ul class="collection"></ul>
-</div>
+		<div id='alarm-container'>
+			<h3>Set Alarm Time</h3>
+				<label>
+					<div>
+					<select id='alarmhrs' ></select>
+					</div>
+				</label>
+				<label>
+					<div>
+					<select id='alarmmins' ></select>
+					</div>
+				</label>
+				<label>
+					<div>
+					<select id='alarmsecs' ></select>
+					</div>
+				</label>
+				<label>
+					<div>
+						<select id="ampm">
+							<option value="AM">AM</option>
+							<option value="PM">PM</option>
+						</select>
+					</div>
+				</label>
+				</div>
+		</div>
+
+		<div id='buttonHolder'>
+			<div>
+				<button  id='setButton' onClick='alarmSet()'>Set Alarm</button>
+			</div>
+
+			<div>
+				<button  id='clearButton' onClick='alarmClear()'>Clear Alarm</button>
+			</div>
+		</div>
+<body>
+
   
-</body>
-<!-- <script crossorigin type="text/javascript" src="js/framework7.min.js"></script> -->
- <script type="text/javascript" src="js/jquery.js"></script>
- <script type="text/javascript" src="js/react.min.js"></script>
- <script type="text/javascript" src="js/react-dom-min.js"></script>
+<section id="todolist"></section>
+  <script src='https://codepen.io/chriscoyier/pen/yIgqi.js'></script>
+<script src='https://fb.me/react-15.1.0.js'></script>
+<script src='https://fb.me/react-dom-15.1.0.js'></script>
+
+  
 
     <script  src="js/index.js"></script>
+    <script  src="js/process.js"></script>
+
+
+
 
 </body>
+
 </html>
